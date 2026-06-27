@@ -561,3 +561,392 @@ function debounce(fn, delay) {
     timer = setTimeout(() => fn(...args), delay);
   };
 }
+
+/* ---- PDF GENERATION ---- */
+
+function initPdf() {
+  const generateBtn = document.getElementById('generatePdfBtn');
+  const downloadBtn = document.getElementById('downloadPdfBtn');
+  const overlay     = document.getElementById('pdfOverlay');
+  const closeBtn1   = document.getElementById('closePdfOverlay');
+  const closeBtn2   = document.getElementById('closePdfOverlay2');
+
+  if (!generateBtn) return;
+
+  generateBtn.addEventListener('click', () => {
+    generateBtn.disabled = true;
+    generateBtn.textContent = '⏳ Building your PDF…';
+    // Small timeout so button state renders before heavy PDF work
+    setTimeout(() => {
+      try {
+        buildPdf();
+        overlay.style.display = 'flex';
+      } catch (e) {
+        showToast('Could not generate PDF. Please try again.');
+        console.error(e);
+      }
+      generateBtn.disabled = false;
+      generateBtn.innerHTML = '🌸 Generate PDF';
+    }, 80);
+  });
+
+  if (downloadBtn) downloadBtn.addEventListener('click', () => buildAndDownloadPdf());
+
+  [closeBtn1, closeBtn2].forEach(btn => {
+    if (btn) btn.addEventListener('click', () => { overlay.style.display = 'none'; });
+  });
+
+  overlay && overlay.addEventListener('click', (e) => {
+    if (e.target === overlay) overlay.style.display = 'none';
+  });
+}
+
+// Collect all user data into a plain object
+function collectUserData() {
+  const cats = loadJSON(STORAGE_KEYS.categories) || {};
+
+  return {
+    word:       (document.getElementById('wordOfYear')?.value   || '').trim(),
+    scripture:  (document.getElementById('themeScripture')?.value || '').trim(),
+    prayer:     (document.getElementById('prayerJournal')?.value  || '').trim(),
+    declaration:(document.getElementById('declaration')?.value    || '').trim(),
+    categories: CATEGORIES.map(cat => ({
+      emoji: cat.emoji,
+      title: cat.title,
+      value: (cats[cat.id] || document.getElementById(`cat_${cat.id}`)?.value || '').trim(),
+    })),
+    progress: getFilledFieldCount(),
+    total:    getTotalFieldCount(),
+    date:     new Date().toLocaleDateString('en-GB', { day:'numeric', month:'long', year:'numeric' }),
+  };
+}
+
+// Build and open PDF (returns jsPDF doc)
+function buildPdf() {
+  const { jsPDF } = window.jspdf;
+  if (!jsPDF) { showToast('PDF library not loaded yet. Please wait a moment and try again.'); return; }
+
+  const doc  = new jsPDF({ unit: 'mm', format: 'a4', orientation: 'portrait' });
+  const data = collectUserData();
+
+  const W    = 210; // page width mm
+  const H    = 297; // page height mm
+  const ML   = 18;  // left margin
+  const MR   = 18;  // right margin
+  const CW   = W - ML - MR; // content width
+  const PURPLE = [107, 63, 160];
+  const GOLD   = [212, 175, 55];
+  const CREAM  = [255, 253, 248];
+  const WHITE  = [255, 255, 255];
+  const DARK   = [45, 27, 78];
+  const MID    = [90, 64, 112];
+
+  let y = 0; // current Y cursor
+
+  /* ---- helper: new page ---- */
+  function newPage() {
+    doc.addPage();
+    y = 18;
+    // Subtle header bar on new pages
+    doc.setFillColor(...PURPLE);
+    doc.rect(0, 0, W, 8, 'F');
+    doc.setFillColor(...GOLD);
+    doc.rect(0, 8, W, 1.2, 'F');
+    y = 18;
+  }
+
+  /* ---- helper: check page space ---- */
+  function checkY(needed = 20) {
+    if (y + needed > H - 20) newPage();
+  }
+
+  /* ---- helper: wrapped text, returns new y ---- */
+  function wrappedText(text, x, startY, maxWidth, lineHeight = 6) {
+    const lines = doc.splitTextToSize(text || '—', maxWidth);
+    doc.text(lines, x, startY);
+    return startY + lines.length * lineHeight;
+  }
+
+  /* ---- helper: section heading ---- */
+  function sectionHeading(title, icon = '') {
+    checkY(22);
+    y += 4;
+    // Gold accent line
+    doc.setFillColor(...GOLD);
+    doc.rect(ML, y, 3, 10, 'F');
+    doc.setFont('helvetica', 'bold');
+    doc.setFontSize(14);
+    doc.setTextColor(...PURPLE);
+    doc.text(`${icon}  ${title}`, ML + 7, y + 7.5);
+    y += 16;
+  }
+
+  /* ---- helper: body label + value ---- */
+  function labelValue(label, value, maxW = CW) {
+    checkY(16);
+    doc.setFont('helvetica', 'bold');
+    doc.setFontSize(8);
+    doc.setTextColor(...GOLD);
+    doc.text(label.toUpperCase(), ML, y);
+    y += 4.5;
+    doc.setFont('helvetica', 'normal');
+    doc.setFontSize(10);
+    doc.setTextColor(...DARK);
+    y = wrappedText(value || '(not filled in)', ML, y, maxW, 5.5);
+    y += 4;
+  }
+
+  /* ===== PAGE 1: COVER ===== */
+  // Deep purple background
+  doc.setFillColor(...PURPLE);
+  doc.rect(0, 0, W, H, 'F');
+
+  // Gold decorative bars
+  doc.setFillColor(...GOLD);
+  doc.rect(0, 0, W, 3, 'F');
+  doc.rect(0, H - 3, W, 3, 'F');
+
+  // Floral decorative circles (subtle)
+  doc.setFillColor(143, 92, 203);
+  doc.circle(W - 30, 40, 50, 'F');
+  doc.circle(20, H - 40, 40, 'F');
+
+  // Logo
+  doc.setFont('helvetica', 'bold');
+  doc.setFontSize(11);
+  doc.setTextColor(...GOLD);
+  doc.text('THE PLANTED WOMAN', W / 2, 55, { align: 'center' });
+
+  // Gold divider
+  doc.setFillColor(...GOLD);
+  doc.rect(ML + 20, 62, CW - 40, 0.8, 'F');
+
+  // Main title
+  doc.setFont('helvetica', 'bold');
+  doc.setFontSize(36);
+  doc.setTextColor(...WHITE);
+  doc.text('My Vision', W / 2, 100, { align: 'center' });
+  doc.setFont('helvetica', 'italic');
+  doc.setFontSize(38);
+  doc.setTextColor(240, 208, 96);
+  doc.text('Garden', W / 2, 118, { align: 'center' });
+
+  // Flowers row
+  doc.setFont('helvetica', 'normal');
+  doc.setFontSize(22);
+  doc.setTextColor(...WHITE);
+  doc.text('🌸  🌿  ✦  🌿  🌸', W / 2, 140, { align: 'center' });
+
+  // Scripture
+  doc.setFont('helvetica', 'italic');
+  doc.setFontSize(10);
+  doc.setTextColor(220, 200, 255);
+  const habLines = doc.splitTextToSize('"Write the vision and make it plain on tablets, that he may run who reads it."', CW - 20);
+  doc.text(habLines, W / 2, 162, { align: 'center' });
+  doc.setFont('helvetica', 'normal');
+  doc.setFontSize(9);
+  doc.setTextColor(...GOLD);
+  doc.text('— Habakkuk 2:2', W / 2, 162 + habLines.length * 6 + 2, { align: 'center' });
+
+  // Word of year highlight
+  if (data.word) {
+    doc.setFillColor(255, 255, 255, 0.08);
+    doc.setDrawColor(...GOLD);
+    doc.roundedRect(ML + 15, 192, CW - 30, 28, 4, 4, 'D');
+    doc.setFont('helvetica', 'normal');
+    doc.setFontSize(8.5);
+    doc.setTextColor(...GOLD);
+    doc.text('MY WORD FOR THE YEAR', W / 2, 202, { align: 'center' });
+    doc.setFont('helvetica', 'bolditalic');
+    doc.setFontSize(22);
+    doc.setTextColor(...WHITE);
+    doc.text(data.word, W / 2, 214, { align: 'center' });
+  }
+
+  // Progress badge
+  const pct = Math.round((data.progress / data.total) * 100);
+  doc.setFont('helvetica', 'bold');
+  doc.setFontSize(9);
+  doc.setTextColor(200, 180, 255);
+  doc.text(`Garden Progress: ${pct}% Complete`, W / 2, 240, { align: 'center' });
+
+  // Date & footer
+  doc.setFont('helvetica', 'normal');
+  doc.setFontSize(8);
+  doc.setTextColor(180, 150, 255);
+  doc.text(`Prepared on ${data.date}`, W / 2, H - 16, { align: 'center' });
+
+  /* ===== PAGE 2: WORD + SCRIPTURE + DECLARATION ===== */
+  newPage();
+
+  // Cream background for content pages
+  doc.setFillColor(...CREAM);
+  doc.rect(0, 8, W, H, 'F');
+  // Re-draw header bar on top
+  doc.setFillColor(...PURPLE);
+  doc.rect(0, 0, W, 8, 'F');
+  doc.setFillColor(...GOLD);
+  doc.rect(0, 8, W, 1.2, 'F');
+
+  y = 22;
+
+  // Page title
+  doc.setFont('helvetica', 'bold');
+  doc.setFontSize(9);
+  doc.setTextColor(...GOLD);
+  doc.text('THE PLANTED WOMAN  ✦  MY VISION GARDEN', W / 2, y, { align: 'center' });
+  y += 12;
+
+  sectionHeading('Word for the Year', '🌱');
+  if (data.word) {
+    doc.setFont('helvetica', 'bolditalic');
+    doc.setFontSize(28);
+    doc.setTextColor(...PURPLE);
+    checkY(20);
+    doc.text(data.word, ML + 3, y);
+    y += 14;
+  } else {
+    labelValue('', '(not filled in)');
+  }
+
+  sectionHeading('Theme Scripture', '✦');
+  doc.setFont('helvetica', 'italic');
+  doc.setFontSize(10.5);
+  doc.setTextColor(...MID);
+  checkY(20);
+  y = wrappedText(data.scripture || '(not filled in)', ML + 3, y, CW - 6, 6);
+  y += 6;
+
+  sectionHeading('My Declaration', '🌿');
+  // Gold-bordered box
+  checkY(50);
+  const declLines = doc.splitTextToSize(data.declaration || '(not filled in)', CW - 12);
+  const boxH = declLines.length * 6 + 14;
+  doc.setFillColor(244, 238, 255);
+  doc.setDrawColor(...GOLD);
+  doc.setLineWidth(0.6);
+  doc.roundedRect(ML, y, CW, boxH, 4, 4, 'FD');
+  doc.setFont('helvetica', 'italic');
+  doc.setFontSize(10);
+  doc.setTextColor(...PURPLE);
+  doc.text(declLines, ML + 6, y + 9);
+  y += boxH + 8;
+
+  /* ===== PAGE 3+: VISION CATEGORIES ===== */
+  newPage();
+  doc.setFillColor(...CREAM);
+  doc.rect(0, 8, W, H, 'F');
+  doc.setFillColor(...PURPLE);
+  doc.rect(0, 0, W, 8, 'F');
+  doc.setFillColor(...GOLD);
+  doc.rect(0, 8, W, 1.2, 'F');
+
+  y = 22;
+  doc.setFont('helvetica', 'bold');
+  doc.setFontSize(9);
+  doc.setTextColor(...GOLD);
+  doc.text('THE PLANTED WOMAN  ✦  VISION CATEGORIES', W / 2, y, { align: 'center' });
+  y += 12;
+
+  sectionHeading('Vision Categories', '🌸');
+
+  data.categories.forEach(cat => {
+    if (!cat.value) return; // skip empty categories
+
+    checkY(28);
+
+    // Category pill header
+    doc.setFillColor(...PURPLE);
+    doc.roundedRect(ML, y, CW, 9, 2, 2, 'F');
+    doc.setFont('helvetica', 'bold');
+    doc.setFontSize(9.5);
+    doc.setTextColor(...WHITE);
+    doc.text(`${cat.emoji}  ${cat.title.toUpperCase()}`, ML + 5, y + 6.2);
+    y += 12;
+
+    // Value
+    doc.setFont('helvetica', 'normal');
+    doc.setFontSize(10);
+    doc.setTextColor(...DARK);
+    checkY(10);
+    y = wrappedText(cat.value, ML + 3, y, CW - 6, 5.5);
+    y += 5;
+  });
+
+  /* ===== PRAYER JOURNAL PAGE ===== */
+  if (data.prayer) {
+    newPage();
+    doc.setFillColor(...CREAM);
+    doc.rect(0, 8, W, H, 'F');
+    doc.setFillColor(...PURPLE);
+    doc.rect(0, 0, W, 8, 'F');
+    doc.setFillColor(...GOLD);
+    doc.rect(0, 8, W, 1.2, 'F');
+
+    y = 22;
+    doc.setFont('helvetica', 'bold');
+    doc.setFontSize(9);
+    doc.setTextColor(...GOLD);
+    doc.text('THE PLANTED WOMAN  ✦  PRAYER JOURNAL', W / 2, y, { align: 'center' });
+    y += 12;
+
+    sectionHeading('Prayer Journal', '🕊️');
+
+    doc.setFont('helvetica', 'italic');
+    doc.setFontSize(9.5);
+    doc.setTextColor(...MID);
+    checkY(20);
+    y = wrappedText(data.prayer, ML + 3, y, CW - 6, 5.5);
+  }
+
+  /* ===== CLOSING PAGE ===== */
+  doc.addPage();
+  doc.setFillColor(...PURPLE);
+  doc.rect(0, 0, W, H, 'F');
+  doc.setFillColor(...GOLD);
+  doc.rect(0, 0, W, 3, 'F');
+  doc.rect(0, H - 3, W, 3, 'F');
+
+  doc.setFont('helvetica', 'normal');
+  doc.setFontSize(22);
+  doc.setTextColor(...WHITE);
+  doc.text('🌸  🌺  🌼', W / 2, 90, { align: 'center' });
+
+  doc.setFont('helvetica', 'bolditalic');
+  doc.setFontSize(20);
+  doc.setTextColor(240, 208, 96);
+  doc.text('She shall flourish.', W / 2, 112, { align: 'center' });
+
+  doc.setFont('helvetica', 'italic');
+  doc.setFontSize(10);
+  doc.setTextColor(220, 200, 255);
+  const ps1 = doc.splitTextToSize('"She is like a tree planted by streams of water, that yields its fruit in its season, and its leaf does not wither."', CW - 20);
+  doc.text(ps1, W / 2, 130, { align: 'center' });
+  doc.setFontSize(9);
+  doc.setTextColor(...GOLD);
+  doc.text('— Psalm 1:3', W / 2, 130 + ps1.length * 6 + 3, { align: 'center' });
+
+  doc.setFont('helvetica', 'normal');
+  doc.setFontSize(8.5);
+  doc.setTextColor(180, 150, 255);
+  doc.text('The Planted Woman  ✦  My Vision Garden', W / 2, H - 20, { align: 'center' });
+  doc.text(`Generated ${data.date}`, W / 2, H - 14, { align: 'center' });
+
+  // Store doc on window so download button can access it
+  window._tpwPdfDoc = doc;
+  return doc;
+}
+
+function buildAndDownloadPdf() {
+  if (window._tpwPdfDoc) {
+    window._tpwPdfDoc.save('MyVisionGarden_ThePlantedWoman.pdf');
+  } else {
+    const doc = buildPdf();
+    if (doc) doc.save('MyVisionGarden_ThePlantedWoman.pdf');
+  }
+}
+
+// Init PDF after DOM ready (called in DOMContentLoaded)
+document.addEventListener('DOMContentLoaded', () => {
+  initPdf();
+});

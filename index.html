@@ -240,6 +240,37 @@ I will run with the vision God has given me.</textarea>
     </div>
   </div>
 
+  <!-- ========== PDF EXPORT BANNER ========== -->
+  <section class="pdf-banner" aria-labelledby="pdf-heading">
+    <div class="pdf-banner-inner">
+      <div class="pdf-banner-text">
+        <span class="pdf-icon" aria-hidden="true">✦</span>
+        <div>
+          <h2 id="pdf-heading" class="pdf-banner-title">Download Your Vision Garden</h2>
+          <p class="pdf-banner-desc">Generate a beautiful, shareable PDF of your vision, prayers, and declarations.</p>
+        </div>
+      </div>
+      <button class="btn-pdf" id="generatePdfBtn" aria-label="Generate and download your vision board as a PDF">
+        🌸 Generate PDF
+      </button>
+    </div>
+  </section>
+
+  <!-- ========== PDF PREVIEW OVERLAY ========== -->
+  <div class="pdf-overlay" id="pdfOverlay" role="dialog" aria-modal="true" aria-labelledby="pdf-overlay-heading" style="display:none">
+    <div class="pdf-overlay-card">
+      <div class="pdf-overlay-header">
+        <h2 id="pdf-overlay-heading" class="pdf-overlay-title">Your Vision Garden PDF</h2>
+        <button class="pdf-close-btn" id="closePdfOverlay" aria-label="Close PDF preview">✕</button>
+      </div>
+      <p class="pdf-overlay-hint">Your PDF is ready. Tap the button below to download it.</p>
+      <div class="pdf-overlay-actions">
+        <button class="btn-primary" id="downloadPdfBtn">⬇ Download PDF</button>
+        <button class="btn-secondary" id="closePdfOverlay2">Close</button>
+      </div>
+    </div>
+  </div>
+
   <!-- ========== FOOTER ========== -->
   <footer class="footer">
     <p class="footer-logo">🌸 The Planted Woman</p>
@@ -247,6 +278,8 @@ I will run with the vision God has given me.</textarea>
     <p class="footer-copy">Your vision is saved privately on this device.</p>
   </footer>
 
+  <!-- jsPDF for PDF generation (loaded from CDN) -->
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf/2.5.1/jspdf.umd.min.js"></script>
   <script src="script.js"></script>
 </body>
 </html>
