@@ -1,253 +1,252 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <meta name="description" content="The Planted Woman – A virtual vision garden for women of faith to plant seeds, nurture dreams, and celebrate God's faithfulness." />
+  <title>The Planted Woman – My Vision Garden</title>
 
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <!-- Fonts -->
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:ital,wght@0,400;0,600;0,700;1,400;1,600&family=Poppins:wght@300;400;500;600&display=swap" rel="stylesheet" />
 
-    <title>The Planted Woman | Vision Garden</title>
-
-    <link rel="stylesheet" href="style.css">
-
-    <link rel="preconnect" href="https://fonts.googleapis.com">
-    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-
-    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700&family=Playfair+Display:wght@500;700&display=swap" rel="stylesheet">
-
+  <link rel="stylesheet" href="style.css" />
 </head>
-
 <body>
 
-<div class="background"></div>
+  <!-- ========== FLOATING BOTANICAL DECORATIONS ========== -->
+  <div class="botanical-bg" aria-hidden="true">
+    <div class="leaf leaf-1">🌿</div>
+    <div class="leaf leaf-2">🍃</div>
+    <div class="leaf leaf-3">✿</div>
+    <div class="leaf leaf-4">🌸</div>
+    <div class="leaf leaf-5">🌿</div>
+    <div class="leaf leaf-6">🍃</div>
+  </div>
 
-<header>
-
-    <div class="logo">
-
-        🌸
-
-        <h2>The Planted Woman</h2>
-
+  <!-- ========== NAVIGATION ========== -->
+  <nav class="navbar" role="navigation" aria-label="Main navigation">
+    <div class="nav-inner">
+      <div class="nav-logo">
+        <span class="logo-icon">🌸</span>
+        <span class="logo-text">The Planted Woman</span>
+      </div>
+      <ul class="nav-links" role="list">
+        <li><a href="#vision" class="nav-link">Vision</a></li>
+        <li><a href="#categories" class="nav-link">Categories</a></li>
+        <li><a href="#prayer" class="nav-link">Prayer</a></li>
+      </ul>
+      <button class="btn-share nav-share" id="shareBtn" aria-label="Share this page">
+        <span>✦</span> Share
+      </button>
     </div>
-
-    <nav>
-
-        <a href="#vision">Vision</a>
-        <a href="#categories">Categories</a>
-        <a href="#prayer">Prayer</a>
-
-        <button id="shareBtn">
-            Share
-        </button>
-
-    </nav>
-
-</header>
-
-<section class="hero">
-
-    <h1>My Vision Garden</h1>
-
-    <p>
-
-        "Write the vision and make it plain..."
-        <br>
-        Habakkuk 2:2
-
-    </p>
-
-    <button class="primary-btn" onclick="scrollToVision()">
-        Begin My Journey
-    </button>
-
-</section>
-
-<section id="vision" class="card">
-
-<h2>My Word for the Year</h2>
-
-<input
-type="text"
-id="word"
-placeholder="Example: Flourish">
-
-<h2>My Theme Scripture</h2>
-
-<textarea
-id="scripture"
-placeholder="Write your key scripture here..."></textarea>
-
-</section>
-
-<section id="categories">
-
-<h2 class="section-title">
-
-Vision Categories
-
-</h2>
-
-<div class="grid">
-
-<div class="vision-card">
-
-🌿
-
-<h3>Faith</h3>
-
-<textarea
-placeholder="My vision..."></textarea>
-
-</div>
-
-<div class="vision-card">
-
-❤️
-
-<h3>Family</h3>
-
-<textarea
-placeholder="My vision..."></textarea>
-
-</div>
-
-<div class="vision-card">
-
-💼
-
-<h3>Career</h3>
-
-<textarea
-placeholder="My vision..."></textarea>
-
-</div>
-
-<div class="vision-card">
-
-💰
-
-<h3>Finances</h3>
-
-<textarea
-placeholder="My vision..."></textarea>
-
-</div>
-
-<div class="vision-card">
-
-🌍
-
-<h3>Ministry</h3>
-
-<textarea
-placeholder="My vision..."></textarea>
-
-</div>
-
-<div class="vision-card">
-
-💪
-
-<h3>Health</h3>
-
-<textarea
-placeholder="My vision..."></textarea>
-
-</div>
-
-<div class="vision-card">
-
-📚
-
-<h3>Education</h3>
-
-<textarea
-placeholder="My vision..."></textarea>
-
-</div>
-
-<div class="vision-card">
-
-✈️
-
-<h3>Travel</h3>
-
-<textarea
-placeholder="My vision..."></textarea>
-
-</div>
-
-</div>
-
-</section>
-
-<section id="prayer" class="card">
-
-<h2>Prayer Journal</h2>
-
-<textarea
-id="prayerBox"
-placeholder="Lord, this year I surrender..."></textarea>
-
-<button class="save-btn">
-
-Save Prayer
-
-</button>
-
-</section>
-
-<section class="card">
-
-<h2>Progress</h2>
-
-<div class="progress-bar">
-
-<div class="progress-fill">
-
-</div>
-
-</div>
-
-<p>
-
-Growing from Seed 🌱 to Bloom 🌸
-
-</p>
-
-</section>
-
-<section class="card">
-
-<h2>Declaration</h2>
-
-<p class="declaration">
-
-I am planted by streams of living water.
-
-I walk in faith.
-
-I trust God's timing.
-
-I will flourish in every season.
-
-</p>
-
-</section>
-
-<footer>
-
-<p>
-
-© 2026 The Planted Woman
-
-Made with Faith • Hope • Love
-
-</p>
-
-</footer>
-
-<script src="script.js"></script>
-
+  </nav>
+
+  <!-- ========== HERO SECTION ========== -->
+  <section class="hero" id="vision" aria-labelledby="hero-heading">
+    <div class="hero-glow" aria-hidden="true"></div>
+    <div class="hero-content">
+      <p class="hero-eyebrow">Welcome to your sacred space</p>
+      <h1 id="hero-heading" class="hero-heading">My Vision<br /><em>Garden</em></h1>
+      <blockquote class="hero-scripture">
+        <p>"Write the vision and make it plain on tablets, that he may run who reads it."</p>
+        <cite>— Habakkuk 2:2</cite>
+      </blockquote>
+      <a href="#word-of-year" class="btn-primary" role="button">Begin My Journey 🌱</a>
+    </div>
+    <div class="hero-flowers" aria-hidden="true">
+      <div class="hero-flower f1">🌸</div>
+      <div class="hero-flower f2">🌺</div>
+      <div class="hero-flower f3">✿</div>
+      <div class="hero-flower f4">🌼</div>
+    </div>
+  </section>
+
+  <!-- ========== MAIN CONTENT ========== -->
+  <main class="main-container">
+
+    <!-- 1. WORD FOR THE YEAR -->
+    <section class="garden-section" id="word-of-year" aria-labelledby="word-heading">
+      <div class="section-label">01</div>
+      <h2 id="word-heading" class="section-title">Word for the Year</h2>
+      <p class="section-desc">What one word is God placing on your heart for this season?</p>
+      <div class="glass-card">
+        <input
+          type="text"
+          id="wordOfYear"
+          class="word-input"
+          placeholder="e.g. Flourish"
+          maxlength="30"
+          aria-label="Your word for the year"
+        />
+        <p class="input-hint">Let this word be your anchor through the year.</p>
+      </div>
+    </section>
+
+    <!-- 2. THEME SCRIPTURE -->
+    <section class="garden-section" aria-labelledby="scripture-theme-heading">
+      <div class="section-label">02</div>
+      <h2 id="scripture-theme-heading" class="section-title">Theme Scripture</h2>
+      <p class="section-desc">Write the verse God has given you for this season.</p>
+      <div class="glass-card">
+        <textarea
+          id="themeScripture"
+          class="journal-textarea"
+          placeholder="Write your theme scripture here…"
+          rows="5"
+          aria-label="Your theme scripture"
+        ></textarea>
+      </div>
+    </section>
+
+    <!-- 3. VISION CATEGORIES -->
+    <section class="garden-section" id="categories" aria-labelledby="categories-heading">
+      <div class="section-label">03</div>
+      <h2 id="categories-heading" class="section-title">Vision Categories</h2>
+      <p class="section-desc">Plant seeds of vision in every area of your life. What do you believe God for?</p>
+      <div class="categories-grid" id="categoriesGrid">
+        <!-- Generated by JS -->
+      </div>
+    </section>
+
+    <!-- 4. PRAYER JOURNAL -->
+    <section class="garden-section" id="prayer" aria-labelledby="prayer-heading">
+      <div class="section-label">04</div>
+      <h2 id="prayer-heading" class="section-title">Prayer Journal</h2>
+      <p class="section-desc">Pour out your heart. Every prayer is a seed planted in faith.</p>
+      <div class="glass-card">
+        <textarea
+          id="prayerJournal"
+          class="journal-textarea prayer-journal"
+          placeholder="Write your prayers, gratitude, and conversations with God here…"
+          rows="10"
+          aria-label="Your prayer journal"
+        ></textarea>
+        <div class="journal-actions">
+          <button class="btn-secondary" id="savePrayer" aria-label="Save prayer journal">
+            🕊️ Save Prayer
+          </button>
+          <span class="save-confirm" id="saveConfirm" aria-live="polite"></span>
+        </div>
+      </div>
+    </section>
+
+    <!-- 5. PROGRESS TRACKER -->
+    <section class="garden-section" aria-labelledby="progress-heading">
+      <div class="section-label">05</div>
+      <h2 id="progress-heading" class="section-title">Garden Progress</h2>
+      <p class="section-desc">As you fill your vision garden, watch it bloom.</p>
+      <div class="glass-card progress-card">
+        <div class="growth-stages" aria-label="Growth stages">
+          <div class="stage" id="stage-seed">
+            <span class="stage-icon">🌱</span>
+            <span class="stage-label">Seed</span>
+          </div>
+          <div class="stage-arrow">→</div>
+          <div class="stage" id="stage-growing">
+            <span class="stage-icon">🌿</span>
+            <span class="stage-label">Growing</span>
+          </div>
+          <div class="stage-arrow">→</div>
+          <div class="stage" id="stage-blooming">
+            <span class="stage-icon">🌸</span>
+            <span class="stage-label">Blooming</span>
+          </div>
+          <div class="stage-arrow">→</div>
+          <div class="stage" id="stage-flourishing">
+            <span class="stage-icon">🌳</span>
+            <span class="stage-label">Flourishing</span>
+          </div>
+        </div>
+        <div class="progress-bar-wrap" role="progressbar" aria-valuenow="0" aria-valuemin="0" aria-valuemax="100" id="progressBarWrap">
+          <div class="progress-bar" id="progressBar">
+            <div class="progress-shimmer"></div>
+          </div>
+        </div>
+        <p class="progress-label" id="progressLabel">0% complete — Begin planting your vision 🌱</p>
+      </div>
+    </section>
+
+    <!-- 6. DECLARATION -->
+    <section class="garden-section" aria-labelledby="declaration-heading">
+      <div class="section-label">06</div>
+      <h2 id="declaration-heading" class="section-title">My Declaration</h2>
+      <p class="section-desc">Speak these words over your life with faith. Edit them to make them yours.</p>
+      <div class="glass-card declaration-card">
+        <div class="declaration-icon" aria-hidden="true">✦</div>
+        <textarea
+          id="declaration"
+          class="declaration-textarea"
+          aria-label="Your personal declaration"
+          rows="7"
+        >I am planted by streams of living water.
+I walk by faith, not by sight.
+I trust God's timing for every season.
+I am rooted in His Word and nourished by His grace.
+I will flourish in every area of my life.
+I am a woman of vision, faith, and purpose.
+I will run with the vision God has given me.</textarea>
+      </div>
+    </section>
+
+    <!-- 7. INSPIRATION GALLERY -->
+    <section class="garden-section" aria-labelledby="gallery-heading">
+      <div class="section-label">07</div>
+      <h2 id="gallery-heading" class="section-title">Inspiration Gallery</h2>
+      <p class="section-desc">Collect images that represent your vision. Upload pictures that inspire your faith.</p>
+      <div class="glass-card gallery-card">
+        <label class="upload-zone" for="imageUpload" id="uploadZone" tabindex="0" role="button" aria-label="Upload inspiration images">
+          <div class="upload-icon">🌸</div>
+          <p class="upload-text">Tap to add an image</p>
+          <p class="upload-hint">JPG, PNG, or WebP</p>
+        </label>
+        <input
+          type="file"
+          id="imageUpload"
+          accept="image/jpeg,image/png,image/webp"
+          multiple
+          style="display:none"
+          aria-label="Choose images to upload"
+        />
+        <div class="gallery-grid" id="galleryGrid" aria-label="Uploaded inspiration images">
+          <!-- Images added by JS -->
+        </div>
+      </div>
+    </section>
+
+    <!-- 8. SCRIPTURE GARDEN -->
+    <section class="garden-section" aria-labelledby="scripture-garden-heading">
+      <div class="section-label">08</div>
+      <h2 id="scripture-garden-heading" class="section-title">Scripture Garden</h2>
+      <p class="section-desc">Water your spirit with the living Word. These verses are seeds of promise.</p>
+      <div class="scripture-grid" id="scriptureGrid">
+        <!-- Generated by JS -->
+      </div>
+    </section>
+
+  </main>
+
+  <!-- ========== CELEBRATION OVERLAY ========== -->
+  <div class="celebration-overlay" id="celebrationOverlay" role="dialog" aria-modal="true" aria-labelledby="celebrate-heading" style="display:none">
+    <div class="celebration-card">
+      <div class="confetti-container" id="confettiContainer" aria-hidden="true"></div>
+      <div class="celebrate-flowers" aria-hidden="true">🌸🌺🌼🌸🌺🌼</div>
+      <h2 id="celebrate-heading" class="celebrate-heading">You are Flourishing! 🌳</h2>
+      <p class="celebrate-verse">"She is like a tree planted by streams of water, which yields its fruit in season."</p>
+      <cite class="celebrate-cite">— Psalm 1:3</cite>
+      <p class="celebrate-message">Your vision garden is in full bloom. God sees every seed of faith you have planted. Keep running with the vision!</p>
+      <button class="btn-primary" id="closeCelebration">Continue Growing ✦</button>
+    </div>
+  </div>
+
+  <!-- ========== FOOTER ========== -->
+  <footer class="footer">
+    <p class="footer-logo">🌸 The Planted Woman</p>
+    <p class="footer-verse">"Blessed is the woman who trusts in the Lord." — Jeremiah 17:7</p>
+    <p class="footer-copy">Your vision is saved privately on this device.</p>
+  </footer>
+
+  <script src="script.js"></script>
 </body>
 </html>
